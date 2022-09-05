@@ -12,8 +12,11 @@
 #include "irsdk_client.h"
 #include "yaml_parser.h"
 #include "iRacing2iCUE.h"
+#include "iCUEHandler.cpp"
 
 HANDLE hDataValidEvent = NULL;
+
+iCUEHandler iCUE;
 
 irsdkCVar g_SessionFlags("SessionFlags"); // (int) irsdk_Flags, bitfield
 
@@ -280,43 +283,81 @@ void run()
 
 void updateDisplay()
 {
-	printf(" flags: ");
+	/*printf(" flags: ");
 	printFlags(g_SessionFlags.getInt());
-	printf("\n");
+	printf("\n");*/
+	iCUE.updateiCUE(getFlagColour(g_SessionFlags.getInt()));
 }
 
-void printFlags(int flags)
+char getFlagColour(int flags)
 {
-	// global flags
-	if (flags & irsdk_checkered) printf("checkered ");
-	if (flags & irsdk_white) printf("white ");
-	if (flags & irsdk_green) printf("green ");
-	if (flags & irsdk_yellow) printf("yellow ");
-	if (flags & irsdk_red) printf("red ");
-	if (flags & irsdk_blue) printf("blue ");
-	if (flags & irsdk_debris) printf("debris ");
-	if (flags & irsdk_crossed) printf("crossed ");
-	if (flags & irsdk_yellowWaving) printf("yellowWaving ");
-	if (flags & irsdk_oneLapToGreen) printf("oneLapToGreen ");
-	if (flags & irsdk_greenHeld) printf("greenHeld ");
-	if (flags & irsdk_tenToGo) printf("tenToGo ");
-	if (flags & irsdk_fiveToGo) printf("fiveToGo ");
-	if (flags & irsdk_randomWaving) printf("randomWaving ");
-	if (flags & irsdk_caution) printf("caution ");
-	if (flags & irsdk_cautionWaving) printf("cautionWaving ");
+	// organised by priority
+	// eg. basically nothing matters if checkered is already dropped
+	// starting lights have priority over everything
 
-	// drivers black flags
-	if (flags & irsdk_black) printf("black ");
-	if (flags & irsdk_disqualify) printf("disqualify ");
-	if (flags & irsdk_servicible) printf("servicible ");
-	if (flags & irsdk_furled) printf("furled ");
-	if (flags & irsdk_repair) printf("repair ");
+	if (flags & irsdk_startHidden) {
+		return 'k';
+	};
+	if (flags & irsdk_startReady) {
+		return 'k';
+	};
+	if (flags & irsdk_startSet) {
+		return 'r';
+	}
+	if (flags & irsdk_startGo) {
+		return 'k';
+	};
+	if (flags & irsdk_green) {
+		return 'g';
+	};
+	if (flags & irsdk_blue) {
+		return 'b';
+	};
+	if (flags & irsdk_red) {
+		return 'r';
+	};
+	if (flags & irsdk_yellow) {
+		return 'y';
+	};
+	if (flags & irsdk_yellowWaving) {
+		return 'y';
+	};
+	if (flags & irsdk_debris) {
+		return 'y';
+	};
+	if (flags & irsdk_caution) {
+		return 'y';
+	};
+	if (flags & irsdk_cautionWaving) {
+		return 'y';
+	};
+	if (flags & irsdk_white) {
+		return 'w';
+	};
+	if (flags & irsdk_black) {
+		return 'k';
+	};
+	if (flags & irsdk_repair) {
+		return 'k';
+	};
+	if (flags & irsdk_disqualify) {
+		return 'k';
+	};
+
+	// global flags
+	//if (flags & irsdk_checkered) printf("checkered ");
+	//if (flags & irsdk_crossed) printf("crossed ");
+	//if (flags & irsdk_oneLapToGreen) printf("oneLapToGreen ");
+	//if (flags & irsdk_greenHeld) printf("greenHeld ");
+	//if (flags & irsdk_tenToGo) printf("tenToGo ");
+	//if (flags & irsdk_fiveToGo) printf("fiveToGo ");
+	//if (flags & irsdk_randomWaving) printf("randomWaving ");
+	
+	//// drivers black flags
+	//if (flags & irsdk_servicible) printf("servicible ");
+	//if (flags & irsdk_furled) printf("furled ");
 
 	// start lights
-	if (flags & irsdk_startHidden) printf("startHidden ");
-	if (flags & irsdk_startReady) printf("startReady ");
-	if (flags & irsdk_startSet) printf("startSet ");
-	if (flags & irsdk_startGo) printf("startGo ");
 }
 
 void monitorConnectionStatus()

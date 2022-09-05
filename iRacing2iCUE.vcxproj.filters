@@ -18,17 +18,23 @@
     <ClCompile Include="iRacing2iCUE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="irsdk_client.cpp">
+    <ClCompile Include="iCUEHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightingManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="irsdk_client.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="irsdk_diskclient.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="irsdk_utils.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="yaml_parser.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,9 +50,34 @@
     <ClInclude Include="iRacing2iCUE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CUESDK.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CUESDKGlobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightingManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CorsairKeyIdEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CorsairLedIdEnum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="iCUEHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
     <None Include=".gitignore" />
+    <None Include="CUESDK.x64_2019.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="CUESDK.x64_2019.lib" />
   </ItemGroup>
 </Project>

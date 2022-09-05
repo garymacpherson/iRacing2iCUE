@@ -16,6 +16,6 @@ bool parseYamlStr(const char* yamlStr, const char* path, char* dest, int maxCoun
 
 void updateDisplay();
 
-void printFlags(int flags);
+char getFlagColour(int flags);
 
 void monitorConnectionStatus();
