@@ -28,22 +28,16 @@ class iCUEHandler {
 			else {
 				switch (input) {
 				case 'g': mLightManager->greenFlag();
-					std::cout << "Green" << std::endl;
 					break;
 				case 'b': mLightManager->blueFlag();
-					std::cout << "Blue" << std::endl;
 					break;
 				case 'r': mLightManager->redFlag();
-					std::cout << "red" << std::endl;
 					break;
 				case 'y': mLightManager->yellowFlag();
-					std::cout << "yellow" << std::endl;
 					break;
 				case 'w': mLightManager->whiteFlag();
-					std::cout << "white" << std::endl;
 					break;
 				case 'k': mLightManager->blackFlag();
-					std::cout << "black" << std::endl;
 				default:
 					break;
 				}

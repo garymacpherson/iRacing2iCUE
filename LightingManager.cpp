@@ -36,7 +36,7 @@ void LightingManager::close()
 
 EC LightingManager::init()
 {
-	printf("Entry");
+	printf("Init iCUE Lighting Manager \n");
 	CorsairPerformProtocolHandshake();
 	if (const auto error = CorsairGetLastError()) {
 		printf("Handshake Failed");
@@ -45,8 +45,6 @@ EC LightingManager::init()
 
 	// std::unordered_map<int, std::vector<CorsairLedColor>>
 	mKeys = new std::unordered_map<int, std::vector<CorsairLedColor*>*>();
-	int count = CorsairGetDeviceCount();
-	CorsairDeviceInfo* foo = CorsairGetDeviceInfo(1);
 	for (auto deviceIndex = 0; deviceIndex < CorsairGetDeviceCount(); deviceIndex++) {
 		if (auto ledPositions = CorsairGetLedPositionsByDeviceIndex(deviceIndex)) {
 			std::vector<CorsairLedColor*>* keys = new std::vector<CorsairLedColor*>();
