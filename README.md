@@ -4,7 +4,7 @@ Feed iRacing flag status to iCUE LED control
 ## TODO
  - [x] C++ hello world
  - [x] iRacing SDK hello world
- - [x] Read flag data from iRacing SDK
+ - [x] Read flag data from iRacing SDK to console
  - [ ] iCUE SDK hello world
  - [ ] iCUE change fan colour
  - [ ] iCUE change colour based on flag data
