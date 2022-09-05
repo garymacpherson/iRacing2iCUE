@@ -151,6 +151,10 @@
     <ClInclude Include="irsdk_defines.h" />
     <ClInclude Include="irsdk_diskclient.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="README.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
