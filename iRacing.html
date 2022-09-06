@@ -1,0 +1,69 @@
+<head>
+    <title>iRacing Flags</title>
+
+    <meta description="iRacing Flag Display" />
+    <meta publisher="Gary MacPherson" />
+
+    <meta property="speed" label="Flashing Speed" type="number" min="1" max="10" default="3">
+</head>
+
+<body style="margin: 0; padding: 0;">
+    <canvas id="exCanvas" width="320" height="200"></canvas>
+</body>
+
+<script>
+    console.clear();
+
+    var c = document.getElementById("exCanvas");
+    var ctx = c.getContext("2d");
+    var width = 320;
+    var height = 200;
+    var colours = ["black"];
+    var invertedColours = ["black"];
+
+    // reset
+    ctx.fillStyle = 'Black';
+    ctx.fillRect(0, 0, width , height);
+
+    function onCanvasApiEvent(event){
+        if(event.sender === "iRacing") {
+            colours = JSON.parse(atob(event.event))["colours"];
+            invertedColours = [colours[1], colours[0], colours[1]];
+            console.log(colours);
+            console.log(invertedColours);
+            //setColour(colours);
+        }
+    }
+
+    const setColour = (colours) => {
+        for(let x=0; x<colours.length;x++) {
+            ctx.fillStyle = colours[x];
+            ctx.fillRect((width/colours.length)*x, 0, width/colours.length, height);
+        }
+    }
+
+    var phase = 0;
+    var drawInverted = false;
+
+    function drawAnimatedFlag() {
+        if (!drawInverted) {
+            setColour(colours);
+        } else {
+            setColour(invertedColours);
+        }
+
+        phase+=speed;
+        if (phase > 100) {
+            drawInverted = !drawInverted;
+            phase = 0;
+        }
+    }
+
+    function update() {
+        drawAnimatedFlag();
+
+        window.requestAnimationFrame(update);
+    }
+
+    window.requestAnimationFrame(update);
+</script>
