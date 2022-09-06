@@ -22,6 +22,8 @@ HANDLE hDataValidEvent = NULL;
 
 irsdkCVar g_SessionFlags("SessionFlags"); // (int) irsdk_Flags, bitfield
 
+
+
 bool init()
 {
 	// trap ctrl-c
@@ -205,6 +207,7 @@ void monitorConnectionStatus()
 
 std::string website_HTML;
 std::locale local;
+std::string currentColour;
 char buffer[10000];
 int i = 0;
 
@@ -216,6 +219,10 @@ void setLEDColour(const char* colour) {
 	std::string get_http;
 
 	std::string colourString = colour;
+
+	if (colourString == currentColour) {
+		return;
+	}
 
 	get_http = "GET /canvas/event?sender=iRacing&event=" + colourString + " HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n";
 
@@ -249,11 +256,14 @@ void setLEDColour(const char* colour) {
 
 	closesocket(Socket);
 	WSACleanup();
+
+	currentColour = colourString;
 }
 
 int main(int argc, char* argv[])
 {
 	printf("iRacingFlagsRGB, press any key to exit\n");
+
 	setLEDColour("black");
 
 	if (init())
