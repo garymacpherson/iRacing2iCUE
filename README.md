@@ -12,5 +12,5 @@ Feed iRacing flag status to LED control via SignalRGB
  - [x] C++ hello world
  - [x] iRacing SDK hello world
  - [x] Read flag data from iRacing SDK to console
- - [ ] Push flag data to SignalRGB
+ - [x] Push flag data to SignalRGB
  - [ ] Flashing/waving animation to separate yellow from waving yellow etc.
