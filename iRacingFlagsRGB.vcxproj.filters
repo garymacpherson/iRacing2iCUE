@@ -54,5 +54,6 @@
   <ItemGroup>
     <None Include="README.md" />
     <None Include=".gitignore" />
+    <None Include="iRacing.html" />
   </ItemGroup>
 </Project>
