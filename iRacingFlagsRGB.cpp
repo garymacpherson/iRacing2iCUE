@@ -10,13 +10,8 @@
 
 #include "irsdk_defines.h"
 #include "irsdk_client.h"
-#include "yaml_parser.h"
-#include "iRacing2iCUE.h"
-#include "iCUEHandler.cpp"
 
 HANDLE hDataValidEvent = NULL;
-
-iCUEHandler iCUE;
 
 irsdkCVar g_SessionFlags("SessionFlags"); // (int) irsdk_Flags, bitfield
 
@@ -81,7 +76,6 @@ void updateDisplay()
 {
 	printFlags(g_SessionFlags.getInt());
 	char flagColour = getFlagColour(g_SessionFlags.getInt());
-	iCUE.updateiCUE(flagColour);
 
 }
 
@@ -122,16 +116,6 @@ void printFlags(int flags)
 
 char getFlagColour(int flags)
 {
-	// organised by priority
-	// eg. basically nothing matters if checkered is already dropped
-	// starting lights have priority over everything
-
-	//if (flags & irsdk_startHidden) {
-	//	return 'k';
-	//};
-	if (flags & irsdk_startReady) {
-		return 'k';
-	};
 	if (flags & irsdk_startSet) {
 		return 'r';
 	}
@@ -215,7 +199,7 @@ void monitorConnectionStatus()
 
 int main(int argc, char* argv[])
 {
-	printf("iRacingFlags2LED, press any key to exit\n");
+	printf("iRacingFlagsRGB, press any key to exit\n");
 
 	if (init())
 	{
