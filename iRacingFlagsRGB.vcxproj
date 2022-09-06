@@ -24,7 +24,7 @@
     <ProjectGuid>{df4780b7-0e17-4d3a-b585-ec44ce82209c}</ProjectGuid>
     <RootNamespace>iRacing2iCUE</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>iRacingFlags2LED</ProjectName>
+    <ProjectName>iRacingFlagsRGB</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -140,34 +140,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="iRacingFlags2LED.cpp" />
+    <ClCompile Include="iRacingFlagsRGB.cpp" />
     <ClCompile Include="irsdk_client.cpp" />
     <ClCompile Include="irsdk_diskclient.cpp" />
     <ClCompile Include="irsdk_utils.cpp" />
-    <ClCompile Include="iCUEHandler.cpp" />
-    <ClCompile Include="LightingManager.cpp" />
     <ClCompile Include="yaml_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CorsairKeyIdEnum.h" />
-    <ClInclude Include="CorsairLedIdEnum.h" />
-    <ClInclude Include="CUESDK.h" />
-    <ClInclude Include="CUESDKGlobal.h" />
     <ClInclude Include="EC.h" />
-    <ClInclude Include="iCUEHandler.h" />
-    <ClInclude Include="iRacing2iCUE.h" />
+    <ClInclude Include="iRacingFlagsRGB.h" />
     <ClInclude Include="irsdk_client.h" />
     <ClInclude Include="irsdk_defines.h" />
     <ClInclude Include="irsdk_diskclient.h" />
-    <ClInclude Include="LightingManager.h" />
+    <ClInclude Include="yaml_parser.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="CUESDK.x64_2019.dll" />
     <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="CUESDK.x64_2019.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
