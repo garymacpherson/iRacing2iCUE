@@ -13,4 +13,4 @@ Feed iRacing flag status to LED control via SignalRGB
  - [x] iRacing SDK hello world
  - [x] Read flag data from iRacing SDK to console
  - [x] Push flag data to SignalRGB
- - [ ] Flashing/waving animation to separate yellow from waving yellow etc.
+ - [x] Flashing/waving animation to separate yellow from waving yellow etc.
