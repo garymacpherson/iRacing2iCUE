@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 void ex_program(int sig);
 
@@ -10,4 +11,4 @@ const char* getFlagColour(int flags);
 
 void monitorConnectionStatus();
 
-void setLEDColour(const char* colour);
+void setLEDColour(std::string base64ColourJSONObject);

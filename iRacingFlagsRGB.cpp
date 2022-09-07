@@ -8,21 +8,21 @@
 #include <math.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <string>
+#include <iostream>
+#include <locale>
 
 #pragma comment(lib, "Ws2_32.lib")
 
 #include "irsdk_defines.h"
 #include "irsdk_client.h"
 #include "iRacingFlagsRGB.h"
-#include <string>
-#include <iostream>
-#include <locale>
+#include "base64.h"
+
 
 HANDLE hDataValidEvent = NULL;
 
 irsdkCVar g_SessionFlags("SessionFlags"); // (int) irsdk_Flags, bitfield
-
-
 
 bool init()
 {
@@ -47,6 +47,9 @@ void deInit()
 {
 	printf("Shutting down.\n\n");
 
+	std::string disableColourControl = base64_encode("{\"colours\":\"default\",\"animate\":false}");
+	setLEDColour(disableColourControl);
+
 	// shutdown
 	if (hDataValidEvent)
 	{
@@ -61,6 +64,9 @@ void deInit()
 
 void ex_program(int sig)
 {
+	std::string disableColourControl = base64_encode("{\"colours\":\"default\",\"animate\":false}");
+	setLEDColour(disableColourControl);
+
 	(void)sig;
 
 	printf("recieved ctrl-c, exiting\n\n");
@@ -85,8 +91,8 @@ void updateDisplay()
 {
 	printFlags(g_SessionFlags.getInt());
 	const char* flagColour = getFlagColour(g_SessionFlags.getInt());
-
-	setLEDColour(flagColour);
+	std::string foo = base64_encode(flagColour);
+	setLEDColour(foo);
 }
 
 void printFlags(int flags)
@@ -126,49 +132,52 @@ void printFlags(int flags)
 
 const char* getFlagColour(int flags)
 {
+	// animated colours should be in sets of 2 or 6.
+	// static colours can be in 2s or 3s
+
 	if (flags & irsdk_startSet) {
-		return "red";
+		return "{\"colours\":[\"red\"],\"animate\":false}";
 	}
 	if (flags & irsdk_startGo) {
-		return "green";
+		return "{\"colours\":[\"green\",\"black\",\"green\",\"black\",\"green\",\"black\"],\"animate\":true}";
 	};
 	if (flags & irsdk_green) {
-		return "green";
+		return "{\"colours\":[\"green\"],\"animate\":false}";
 	};
 	if (flags & irsdk_blue) {
-		return "blue";
+		return "{\"colours\":[\"blue\",\"yellow\",\"blue\"],\"animate\":false}";
 	};
 	if (flags & irsdk_red) {
-		return "red";
+		return "{\"colours\":[\"red\"],\"animate\":false}";
 	};
 	if (flags & irsdk_yellow) {
-		return "yellow";
+		return "{\"colours\":[\"yellow\"],\"animate\":false}";
 	};
 	if (flags & irsdk_yellowWaving) {
-		return "yellow";
+		return "{\"colours\":[\"yellow\",\"white\"],\"animate\":true}";
 	};
 	if (flags & irsdk_debris) {
-		return "yellow";
+		return "{\"colours\":[\"yellow\"],\"animate\":false}";
 	};
 	if (flags & irsdk_caution) {
-		return "yellow";
+		return "{\"colours\":[\"yellow\"],\"animate\":false}";
 	};
 	if (flags & irsdk_cautionWaving) {
-		return "yellow";
+		return "{\"colours\":[\"yellow\",\"white\"],\"animate\":true}";
 	};
 	if (flags & irsdk_white) {
-		return "white";
+		return "{\"colours\":[\"white\"],\"animate\":false}";
 	};
 	if (flags & irsdk_black) {
-		return "black";
+		return "{\"colours\":[\"white\"],\"animate\":false}";
 	};
 	if (flags & irsdk_repair) {
-		return "black";
+		return "{\"colours\":[\"black\",\"orange\",\"black\"],\"animate\":true}";
 	};
 	if (flags & irsdk_disqualify) {
-		return "black";
+		return "{\"colours\":[\"black\",\"red\",\"black\"],\"animate\":true}";
 	};
-	return "black";
+	return "{\"colours\":[\"black\"],\"animate\":false}";
 
 	// global flags
 	//if (flags & irsdk_checkered) printf("checkered ");
@@ -192,14 +201,15 @@ void monitorConnectionStatus()
 	static bool wasConnected = false;
 
 	bool isConnected = irsdkClient::instance().isConnected();
-	if (wasConnected != isConnected)
-	{
-		if (isConnected)
-		{
+	if (wasConnected != isConnected) {
+		if (isConnected) {
 			printf("Connected to iRacing              \n");
 		}
-		else
+		else {
 			printf("Lost connection to iRacing        \n");
+			std::string disableColourControl = base64_encode("{\"colours\":\"default\",\"animate\":false}");
+			setLEDColour(disableColourControl);
+		}
 
 		wasConnected = isConnected;
 	}
@@ -211,20 +221,18 @@ std::string currentColour;
 char buffer[10000];
 int i = 0;
 
-void setLEDColour(const char* colour) {
+void setLEDColour(std::string base64ColourJSONObject) {
 	WSADATA wsaData;
 	SOCKET Socket;
 	SOCKADDR_IN SockAddr;
 	struct hostent* host;
 	std::string get_http;
 
-	std::string colourString = colour;
-
-	if (colourString == currentColour) {
+	if (base64ColourJSONObject == currentColour) {
 		return;
 	}
 
-	get_http = "GET /canvas/event?sender=iRacing&event=" + colourString + " HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n";
+	get_http = "GET /canvas/event?sender=iRacing&event=" + base64ColourJSONObject + " HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n";
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
 		std::cout << "WSAStartup failed.\n";
@@ -257,14 +265,15 @@ void setLEDColour(const char* colour) {
 	closesocket(Socket);
 	WSACleanup();
 
-	currentColour = colourString;
+	currentColour = base64ColourJSONObject;
 }
 
 int main(int argc, char* argv[])
 {
 	printf("iRacingFlagsRGB, press any key to exit\n");
 
-	setLEDColour("black");
+	std::string defaultColour = base64_encode("{\"colours\":[\"black\"],\"animate\":false}");
+	setLEDColour(defaultColour);
 
 	if (init())
 	{

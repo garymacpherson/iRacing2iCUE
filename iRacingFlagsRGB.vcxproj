@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="base64.cpp" />
     <ClCompile Include="iRacingFlagsRGB.cpp" />
     <ClCompile Include="irsdk_client.cpp" />
     <ClCompile Include="irsdk_diskclient.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="yaml_parser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="base64.h" />
     <ClInclude Include="EC.h" />
     <ClInclude Include="iRacingFlagsRGB.h" />
     <ClInclude Include="irsdk_client.h" />
