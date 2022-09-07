@@ -5,6 +5,7 @@
     <meta publisher="Gary MacPherson" />
 
     <meta property="speed" label="Flashing Speed" type="number" min="1" max="10" default="3">
+    <meta property="default_colour" label="Default Colour" type="color" default="#009bde" min="0" max="360" />
 </head>
 
 <body style="margin: 0; padding: 0;">
@@ -18,49 +19,70 @@
     var ctx = c.getContext("2d");
     var width = 320;
     var height = 200;
-    var colours = ["black"];
-    var invertedColours = ["black"];
+    var colours = [];
+    var iRacingRunning = false;
+    var drawAnimated = false;
 
-    // reset
-    ctx.fillStyle = 'Black';
-    ctx.fillRect(0, 0, width , height);
-
-    function onCanvasApiEvent(event){
-        if(event.sender === "iRacing") {
+    function onCanvasApiEvent(event) {
+        if (event.sender === "iRacing") {
             colours = JSON.parse(atob(event.event))["colours"];
-            invertedColours = [colours[1], colours[0], colours[1]];
-            console.log(colours);
-            console.log(invertedColours);
-            //setColour(colours);
+            drawAnimated = JSON.parse(atob(event.event))["animate"];
+            if (colours === "default") {
+                iRacingRunning = false;
+                drawAnimated = false;
+            } else {
+                iRacingRunning = true;
+            }
         }
     }
 
     const setColour = (colours) => {
-        for(let x=0; x<colours.length;x++) {
+        console.log(colours)
+        for (let x = 0; x < colours.length; x++) {
             ctx.fillStyle = colours[x];
-            ctx.fillRect((width/colours.length)*x, 0, width/colours.length, height);
+            ctx.fillRect((width / colours.length) * x, 0, width / colours.length, height);
         }
     }
 
+    const alternateArray = (colours) => {
+        var alternateColours = [];
+        for (let x = 0; x < colours.length; x++) {
+            if (colours[x + 1]) {
+                alternateColours.push(colours[x + 1]);
+            } else {
+                alternateColours.push(colours[x - 1]);
+            }
+        }
+        return alternateColours;
+    }
+
     var phase = 0;
-    var drawInverted = false;
+    var drawAlternate = false;
 
     function drawAnimatedFlag() {
-        if (!drawInverted) {
+        if (!drawAlternate) {
             setColour(colours);
         } else {
-            setColour(invertedColours);
+            setColour(alternateArray(colours));
         }
 
-        phase+=speed;
+        phase += speed;
         if (phase > 100) {
-            drawInverted = !drawInverted;
+            drawAlternate = !drawAlternate;
             phase = 0;
         }
     }
 
     function update() {
-        drawAnimatedFlag();
+        if (!iRacingRunning) {
+            setColour([default_colour]);
+        } else {
+            if (drawAnimated) {
+                drawAnimatedFlag();
+            } else {
+                setColour(colours);
+            }
+        }
 
         window.requestAnimationFrame(update);
     }
