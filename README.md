@@ -6,7 +6,7 @@ Feed iRacing flag status to LED control via SignalRGB
 2. Follow the setup to get Signal RGB working for all your devices
 3. Put `iRacing.html` in `C:\Users\YourName\Documents\WhirlwindFX\Effects`
 4. In SignalRGB activate the iRacing Flags effect under the "Installed" category
-5. Run this code
+5. Compile and run iRacingFlagsRGB.cpp
 
 ## TODO
  - [x] C++ hello world
